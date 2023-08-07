@@ -1,11 +1,11 @@
 <?php
 /*
 Plugin Name: User Column Manager
-Plugin URI: http://your-plugin-website.com/
+Plugin URI: https://github.com/WpNizzle/User-Column-Manager
 Description: Allows users to add additional columns to the user list.
-Version: 1.0
+Version: 0.1.0
 Author: WpNizzle
-Author URI: http://your-website.com/
+Author URI: https://wpnizzle.com/
 */
 
 // Register the plugin's settings page
