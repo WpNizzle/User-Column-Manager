@@ -64,23 +64,20 @@ add_filter('manage_users_columns', 'user_column_manager_add_custom_columns');
 
 // Display data in custom column
 function user_column_manager_show_user_column_data($value, $column_name, $user_id) {
-    if ('additional_column' === $column_name) {
-        // Get the additional data for the user
-        $custom_columns = get_option('user_column_manager_columns', '');
-        if (!empty($custom_columns)) {
-            $custom_column_labels = explode(',', $custom_columns);
-            foreach ($custom_column_labels as $label) {
-                $column_key = sanitize_key(trim($label));
-                if ($column_key === $column_name) {
-                    $additional_data = get_user_meta($user_id, 'user_column_manager_additional_data_' . $column_key, true);
+    $custom_columns = get_option('user_column_manager_columns', '');
+    if (!empty($custom_columns)) {
+        $custom_column_labels = explode(',', $custom_columns);
+        foreach ($custom_column_labels as $label) {
+            $column_key = sanitize_key(trim($label));
+            if ($column_key === $column_name) {
+                $additional_data = get_user_meta($user_id, 'user_column_manager_additional_data_' . $column_key, true);
 
-                    // Check if the value is empty, and display "-" if it is
-                    if (empty($additional_data)) {
-                        return '-';
-                    }
-
-                    return $additional_data;
+                // Check if the value is empty, and display "-" if it is
+                if (empty($additional_data)) {
+                    return '-';
                 }
+
+                return $additional_data;
             }
         }
     }
@@ -88,7 +85,6 @@ function user_column_manager_show_user_column_data($value, $column_name, $user_i
     return $value;
 }
 add_filter('manage_users_custom_column', 'user_column_manager_show_user_column_data', 10, 3);
-
 
 // Add additional column fields to "Add New User" page
 function user_column_manager_add_new_user_fields() {
