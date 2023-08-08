@@ -150,8 +150,8 @@ function user_column_manager_save_additional_data_on_registration( $user_id ) {
 		$custom_column_labels = explode( ',', $custom_columns );
 		foreach ( $custom_column_labels as $label ) {
 			$column_key = sanitize_key( trim( $label ) );
-			if ( isset( $_POST[$column_key] ) ) {
-				$additional_data = sanitize_text_field( $_POST[$column_key] );
+			if ( isset( $_POST[ $column_key ] ) ) {
+				$additional_data = sanitize_text_field( $_POST[ $column_key ] );
 				update_user_meta( $user_id, 'user_column_manager_additional_data_' . $column_key, $additional_data );
 			}
 		}
@@ -171,8 +171,8 @@ function user_column_manager_save_additional_data_on_profile_update( $user_id ) 
 		$custom_column_labels = explode( ',', $custom_columns );
 		foreach ( $custom_column_labels as $label ) {
 			$column_key = sanitize_key( trim( $label ) );
-			if ( isset( $_POST[$column_key] ) ) {
-				$additional_data = sanitize_text_field( $_POST[$column_key] );
+			if ( isset( $_POST[ $column_key ] ) ) {
+				$additional_data = sanitize_text_field( $_POST[ $column_key ] );
 				update_user_meta( $user_id, 'user_column_manager_additional_data_' . $column_key, $additional_data );
 			}
 		}
