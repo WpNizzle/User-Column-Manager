@@ -1,9 +1,10 @@
 === User Column Manager ===
-Contributors: wpnizzle
+Contributors: wpnizzle, Lewis ushindi, frenziecodes
 Tags: user, columns, profile, custom, management
-Requires at least: 5.0
-Tested up to: 5.8
-Stable tag: 1.0.0
+Requires at least: 6.0
+Tested up to: 6.2.2
+Stable tag: 0.1.0
+Requires PHP: 7.0
 License: GPL-3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
