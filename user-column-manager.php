@@ -70,15 +70,19 @@ function user_column_manager_add_custom_columns( $columns ) {
 	$custom_columns = get_option( 'user_column_manager_columns', '' );
 	if ( ! empty( $custom_columns ) ) {
 		$custom_column_labels = explode( ',', $custom_columns );
+		$new_columns = array();
 		foreach ( $custom_column_labels as $label ) {
 			$column_key = sanitize_key( trim( $label ) );
-			$columns[ $column_key ] = $label;
+			$new_columns[ $column_key ] = $label;
 		}
+		$posts_index = array_search( 'posts', array_keys( $columns ) );
+		$before_posts = array_slice( $columns, 0, $posts_index, true );
+		$after_posts = array_slice( $columns, $posts_index, null, true );
+		$columns = array_merge( $before_posts, $new_columns, $after_posts );
 	}
 	return $columns;
 }
 add_filter( 'manage_users_columns', 'user_column_manager_add_custom_columns' );
-
 
 /**
  * Display data in custom column
