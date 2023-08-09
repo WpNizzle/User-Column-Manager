@@ -2,7 +2,7 @@
 Contributors: wpnizzle, Lewis ushindi, frenziecodes
 Tags: user, columns, profile, custom, management
 Requires at least: 6.0
-Tested up to: 6.2.2
+Tested up to: 6.3
 Stable tag: 0.1.0
 Requires PHP: 7.0
 License: GPL-3.0
