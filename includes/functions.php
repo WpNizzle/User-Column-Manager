@@ -28,8 +28,9 @@ function user_column_manager_settings_page() {
         echo '<div class="notice notice-success is-dismissible"><p>Custom columns have been added successfully.</p></div>';
     }
 
-    // Get existing custom columns.
+    // Get existing custom columns and registration date visibility.
     $existing_columns = get_option('user_column_manager_columns', '');
+    $registration_date_visible = get_option('user_column_manager_registration_date_visible', true);
 
     ?>
     <div class="wrap">
@@ -39,8 +40,10 @@ function user_column_manager_settings_page() {
             <input type="text" name="user_column_manager_columns" id="user_column_manager_columns"
                    value="<?php echo esc_attr($existing_columns); ?>" class="regular-text"/>
             <?php submit_button('Save Columns', 'primary', 'user_column_manager_save_columns'); ?>
-        </form>
+        </form>       
+
         <?php
+        // Update the code for displaying custom columns
         if (!empty($existing_columns)) {
             echo '<h2>Custom Columns</h2>';
             echo '<p>Drag and drop column to reorder</p>';
@@ -52,9 +55,25 @@ function user_column_manager_settings_page() {
             }
             echo '</div>';
         }
+            
         ?>
+        
+        <form method="post">
+            <label for="user_column_manager_registration_date_visible">
+                <input type="checkbox" name="user_column_manager_registration_date_visible" id="user_column_manager_registration_date_visible"
+                    value="1" <?php checked($registration_date_visible); ?> />
+                Show Registration Date in Users List
+            </label>
+            <?php submit_button('Save Settings', 'secondary', 'user_column_manager_save_settings'); ?>
+        </form>
     </div>
     <?php
+}
+
+// Handle toggle button submission
+if (isset($_POST['user_column_manager_save_settings'])) {
+    $registration_date_visible = isset($_POST['user_column_manager_registration_date_visible']) ? true : false;
+    update_option('user_column_manager_registration_date_visible', $registration_date_visible);
 }
 
 /**
@@ -199,7 +218,12 @@ add_action( 'edit_user_profile_update', 'user_column_manager_save_additional_dat
 
 // Add the registration date column to the user list.
 function user_column_manager_add_registration_date_column($columns) {
-    $columns['registration_date'] = __('Registration Date', 'user-column-manager');
+    $registration_date_visible = get_option('user_column_manager_registration_date_visible', true);
+
+    if ($registration_date_visible) {
+        $columns['registration_date'] = __('Registration Date', 'user-column-manager');
+    }
+
     return $columns;
 }
 add_filter('manage_users_columns', 'user_column_manager_add_registration_date_column');
