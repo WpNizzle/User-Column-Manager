@@ -12,19 +12,11 @@
  * @package User Column manager
  */
 
-/**
- * Register the plugin's settings page
- */
-function user_column_manager_register_settings_page() {
-	add_users_page(
-		'User Column Manager',
-		'User Column Manager',
-		'manage_options',
-		'user-column-manager',
-		'user_column_manager_settings_page'
-	);
-}
-add_action( 'admin_menu', 'user_column_manager_register_settings_page' );
+// Exit if accessed directly.
+defined( 'ABSPATH' ) || exit;
+
+require_once plugin_dir_path( __FILE__ ) . 'includes/functions.php';
+
 
 /**
  * Settings page content
