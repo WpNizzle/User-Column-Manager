@@ -24,7 +24,7 @@ This plugin is designed to simplify user data management and provide you with th
 
 == Installation ==
 
-1. Download the plugin ZIP file from the WordPress Plugin Directory.
+1. Download the latest plugin release ZIP file from [GitHub](https://github.com/WpNizzle/User-Column-Manager).
 2. Log in to your WordPress admin dashboard.
 3. Go to "Plugins" > "Add New" and click the "Upload Plugin" button.
 4. Choose the downloaded ZIP file and click "Install Now."

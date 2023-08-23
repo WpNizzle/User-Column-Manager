@@ -14,8 +14,6 @@
 
 /**
  * Register the plugin's settings page
- *
- * @return void
  */
 function user_column_manager_register_settings_page() {
 	add_users_page(
@@ -30,8 +28,6 @@ add_action( 'admin_menu', 'user_column_manager_register_settings_page' );
 
 /**
  * Settings page content
- *
- * @return void
  */
 function user_column_manager_settings_page() {
 	if ( ! current_user_can( 'manage_options' ) ) {
