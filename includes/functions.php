@@ -134,6 +134,16 @@ function user_column_manager_add_new_user_fields() {
 			<?php
 		}
 	}
+    ?>
+    <table class="form-table">
+        <tr>
+            <th><label for="registration_date">Registration Date:</label></th>
+            <td>
+                <input type="text" name="registration_date" id="registration_date" value="" class="regular-text" disabled />
+            </td>
+        </tr>
+    </table>
+    <?php
 }
 
 add_action( 'user_new_form', 'user_column_manager_add_new_user_fields' );
@@ -145,8 +155,8 @@ add_action( 'show_user_profile', 'user_column_manager_add_new_user_fields' );
  *
  * @param int $user_id The ID of the newly registered user.
  */
-function user_column_manager_save_additional_data_on_registration( $user_id ) {
-	$custom_columns = get_option( 'user_column_manager_columns', '' );
+function user_column_manager_save_additional_data_on_registration($user_id) {
+    $custom_columns = get_option( 'user_column_manager_columns', '' );
 	if ( ! empty( $custom_columns ) ) {
 		$custom_column_labels = explode( ',', $custom_columns );
 		foreach ( $custom_column_labels as $label ) {
@@ -157,8 +167,12 @@ function user_column_manager_save_additional_data_on_registration( $user_id ) {
 			}
 		}
 	}
+
+    // Save registration date as additional data
+    update_user_meta( $user_id, 'user_column_manager_additional_data_registration_date', current_time( 'mysql' ) );
 }
 add_action( 'user_register', 'user_column_manager_save_additional_data_on_registration' );
+
 
 
 /**
@@ -182,3 +196,23 @@ function user_column_manager_save_additional_data_on_profile_update( $user_id ) 
 
 add_action( 'personal_options_update', 'user_column_manager_save_additional_data_on_profile_update' );
 add_action( 'edit_user_profile_update', 'user_column_manager_save_additional_data_on_profile_update' );
+
+// Add the registration date column to the user list.
+function user_column_manager_add_registration_date_column($columns) {
+    $columns['registration_date'] = __('Registration Date', 'user-column-manager');
+    return $columns;
+}
+add_filter('manage_users_columns', 'user_column_manager_add_registration_date_column');
+
+// Populate the registration date column with user registration dates.
+function user_column_manager_show_registration_date_data($output, $column_name, $user_id) {
+    if ($column_name === 'registration_date') {
+        $user = get_userdata($user_id);
+        if ($user) {
+            $registration_date = $user->user_registered;
+            return date_i18n(get_option('date_format'), strtotime($registration_date));
+        }
+    }
+    return $output;
+}
+add_filter('manage_users_custom_column', 'user_column_manager_show_registration_date_data', 10, 3);
