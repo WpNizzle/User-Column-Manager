@@ -1,4 +1,5 @@
-<?php 
+<?php
+
 /**
  * Register the plugin's settings page
  */
@@ -17,63 +18,59 @@ add_action( 'admin_menu', 'user_column_manager_register_settings_page' );
  * Settings page content
  */
 function user_column_manager_settings_page() {
-    if (!current_user_can('manage_options')) {
-        return;
-    }
 
-    // Save custom columns on form submission.
-    if (isset($_POST['user_column_manager_columns'])) {
-        $columns = sanitize_text_field($_POST['user_column_manager_columns']);
-        update_option('user_column_manager_columns', $columns);
-        echo '<div class="notice notice-success is-dismissible"><p>Custom columns have been added successfully.</p></div>';
-    }
+	if ( ! current_user_can( 'manage_options' ) ) {
+		return;
+	}
 
-    // Get existing custom columns and registration date visibility.
-    $existing_columns = get_option('user_column_manager_columns', '');
-    $registration_date_visible = get_option('user_column_manager_registration_date_visible', true);
+	if ( isset( $_POST['user_column_manager_columns'] ) ) {
+		$columns = sanitize_text_field( $_POST['user_column_manager_columns'] );
+		update_option( 'user_column_manager_columns', $columns );
+		echo '<div class="notice notice-success is-dismissible"><p>Custom columns have been added successfully.</p></div>';
+	}
+	$existing_columns          = get_option( 'user_column_manager_columns', '' );
+	$registration_date_visible = get_option( 'user_column_manager_registration_date_visible', true );
 
-    ?>
-    <div class="wrap">
-        <h1>User Column Manager</h1>
-        <form method="post">
-            <label for="user_column_manager_columns">Enter column names separated by commas:</label>
-            <input type="text" name="user_column_manager_columns" id="user_column_manager_columns"
-                   value="<?php echo esc_attr($existing_columns); ?>" class="regular-text"/>
-            <?php submit_button('Save Columns', 'primary', 'user_column_manager_save_columns'); ?>
-        </form>       
+	?>
+	<div class="wrap">
+		<h1>User Column Manager</h1>
+		<form method="post">
+			<label for="user_column_manager_columns">Enter column names separated by commas:</label>
+			<input type="text" name="user_column_manager_columns" id="user_column_manager_columns"
+				value="<?php echo esc_attr( $existing_columns ); ?>" class="regular-text"/>
+			<?php submit_button( 'Save Columns', 'primary', 'user_column_manager_save_columns' ); ?>
+		</form>       
 
-        <?php
-        // Update the code for displaying custom columns
-        if (!empty($existing_columns)) {
-            echo '<h2>Custom Columns</h2>';
-            echo '<p>Drag and drop column to reorder</p>';
-            echo '<div id="custom-columns-list">';
-            $custom_column_labels = explode(',', $existing_columns);
-            foreach ($custom_column_labels as $label) {
-                $column_key = sanitize_key(trim($label));
-                echo '<div class="custom-column-item" data-column-key="' . esc_attr($column_key) . '">' . esc_html($label) . '<span class="delete-column">Delete</span></div>';
-            }
-            echo '</div>';
-        }
-            
-        ?>
-        
-        <form method="post">
-            <label for="user_column_manager_registration_date_visible">
-                <input type="checkbox" name="user_column_manager_registration_date_visible" id="user_column_manager_registration_date_visible"
-                    value="1" <?php checked($registration_date_visible); ?> />
-                Show Registration Date in Users List
-            </label>
-            <?php submit_button('Save Settings', 'secondary', 'user_column_manager_save_settings'); ?>
-        </form>
-    </div>
-    <?php
+		<?php
+		if ( ! empty( $existing_columns ) ) {
+			echo '<h2>Custom Columns</h2>';
+			echo '<p>Drag and drop column to reorder</p>';
+			echo '<div id="custom-columns-list">';
+			$custom_column_labels = explode( ',', $existing_columns );
+			foreach ( $custom_column_labels as $label ) {
+				$column_key = sanitize_key( trim( $label ) );
+				echo '<div class="custom-column-item" data-column-key="' . esc_attr( $column_key ) . '">' . esc_html( $label ) . '<span class="delete-column">Delete</span></div>';
+			}
+			echo '</div>';
+		}
+
+		?>
+
+		<form method="post">
+			<label for="user_column_manager_registration_date_visible">
+				<input type="checkbox" name="user_column_manager_registration_date_visible" id="user_column_manager_registration_date_visible"
+					value="1" <?php checked( $registration_date_visible ); ?> />
+				Show Registration Date in Users List
+			</label>
+			<?php submit_button( 'Save Settings', 'secondary', 'user_column_manager_save_settings' ); ?>
+		</form>
+	</div>
+	<?php
 }
 
-// Handle toggle button submission
-if (isset($_POST['user_column_manager_save_settings'])) {
-    $registration_date_visible = isset($_POST['user_column_manager_registration_date_visible']) ? true : false;
-    update_option('user_column_manager_registration_date_visible', $registration_date_visible);
+if ( isset( $_POST['user_column_manager_save_settings'] ) ) {
+	$registration_date_visible = isset( $_POST['user_column_manager_registration_date_visible'] ) ? true : false;
+	update_option( 'user_column_manager_registration_date_visible', $registration_date_visible );
 }
 
 /**
@@ -153,16 +150,16 @@ function user_column_manager_add_new_user_fields() {
 			<?php
 		}
 	}
-    ?>
-    <table class="form-table">
-        <tr>
-            <th><label for="registration_date">Registration Date:</label></th>
-            <td>
-                <input type="text" name="registration_date" id="registration_date" value="" class="regular-text" disabled />
-            </td>
-        </tr>
-    </table>
-    <?php
+	?>
+	<table class="form-table">
+		<tr>
+			<th><label for="registration_date">Registration Date:</label></th>
+			<td>
+				<input type="text" name="registration_date" id="registration_date" value="" class="regular-text" disabled />
+			</td>
+		</tr>
+	</table>
+	<?php
 }
 
 add_action( 'user_new_form', 'user_column_manager_add_new_user_fields' );
@@ -174,8 +171,8 @@ add_action( 'show_user_profile', 'user_column_manager_add_new_user_fields' );
  *
  * @param int $user_id The ID of the newly registered user.
  */
-function user_column_manager_save_additional_data_on_registration($user_id) {
-    $custom_columns = get_option( 'user_column_manager_columns', '' );
+function user_column_manager_save_additional_data_on_registration( $user_id ) {
+	$custom_columns = get_option( 'user_column_manager_columns', '' );
 	if ( ! empty( $custom_columns ) ) {
 		$custom_column_labels = explode( ',', $custom_columns );
 		foreach ( $custom_column_labels as $label ) {
@@ -186,9 +183,7 @@ function user_column_manager_save_additional_data_on_registration($user_id) {
 			}
 		}
 	}
-
-    // Save registration date as additional data
-    update_user_meta( $user_id, 'user_column_manager_additional_data_registration_date', current_time( 'mysql' ) );
+	update_user_meta( $user_id, 'user_column_manager_additional_data_registration_date', current_time( 'mysql' ) );
 }
 add_action( 'user_register', 'user_column_manager_save_additional_data_on_registration' );
 
@@ -216,27 +211,40 @@ function user_column_manager_save_additional_data_on_profile_update( $user_id ) 
 add_action( 'personal_options_update', 'user_column_manager_save_additional_data_on_profile_update' );
 add_action( 'edit_user_profile_update', 'user_column_manager_save_additional_data_on_profile_update' );
 
-// Add the registration date column to the user list.
-function user_column_manager_add_registration_date_column($columns) {
-    $registration_date_visible = get_option('user_column_manager_registration_date_visible', true);
+/**
+ * Add the registration date column to the user list.
+ *
+ * @param array $columns The existing columns in the user list.
+ * @return array Modified list of columns including the registration date column if applicable.
+ */
+function user_column_manager_add_registration_date_column( $columns ) {
+	$registration_date_visible = get_option( 'user_column_manager_registration_date_visible', true );
 
-    if ($registration_date_visible) {
-        $columns['registration_date'] = __('Registration Date', 'user-column-manager');
-    }
+	if ( $registration_date_visible ) {
+		$columns['registration_date'] = __( 'Registration Date', 'user-column-manager' );
+	}
 
-    return $columns;
+	return $columns;
 }
-add_filter('manage_users_columns', 'user_column_manager_add_registration_date_column');
+add_filter( 'manage_users_columns', 'user_column_manager_add_registration_date_column' );
 
-// Populate the registration date column with user registration dates.
-function user_column_manager_show_registration_date_data($output, $column_name, $user_id) {
-    if ($column_name === 'registration_date') {
-        $user = get_userdata($user_id);
-        if ($user) {
-            $registration_date = $user->user_registered;
-            return date_i18n(get_option('date_format'), strtotime($registration_date));
-        }
-    }
-    return $output;
+/**
+ * Populate the registration date column with user registration dates.
+ *
+ * @param string $output      The default column output. Not used here.
+ * @param string $column_name The name of the column being processed.
+ * @param int    $user_id     The ID of the user being processed.
+ * @return string Modified column output with the registration date if applicable.
+ */
+function user_column_manager_show_registration_date_data( $output, $column_name, $user_id ) {
+	if ( 'registration_date' === $column_name ) {
+		$user = get_userdata( $user_id );
+		if ( $user ) {
+			$registration_date = $user->user_registered;
+			return date_i18n( get_option( 'date_format' ), strtotime( $registration_date ) );
+		}
+	}
+	return $output;
 }
-add_filter('manage_users_custom_column', 'user_column_manager_show_registration_date_data', 10, 3);
+add_filter( 'manage_users_custom_column', 'user_column_manager_show_registration_date_data', 10, 3 );
+
