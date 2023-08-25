@@ -30,6 +30,7 @@ function user_column_manager_settings_page() {
 	}
 	$existing_columns          = get_option( 'user_column_manager_columns', '' );
 	$registration_date_visible = get_option( 'user_column_manager_registration_date_visible', true );
+	$last_login_date_visible = get_option( 'user_column_manager_last_login_date_visible', true );
 
 	?>
 	<div class="wrap">
@@ -57,11 +58,17 @@ function user_column_manager_settings_page() {
 		?>
 
 		<form method="post">
-			<label for="user_column_manager_registration_date_visible">
+			<label for="user_column_manager_registration_date_visible" style="margin-right: 20px;">
 				<input type="checkbox" name="user_column_manager_registration_date_visible" id="user_column_manager_registration_date_visible"
 					value="1" <?php checked( $registration_date_visible ); ?> />
 				Show Registration Date in Users List
 			</label>
+			<label for="user_column_manager_last_login_date_visible">
+				<input type="checkbox" name="user_column_manager_last_login_date_visible" id="user_column_manager_last_login_date_visible"
+					value="1" <?php checked( $last_login_date_visible ); ?> />
+				Show Last Login Date in Users List
+			</label>
+
 			<?php submit_button( 'Save Settings', 'secondary', 'user_column_manager_save_settings' ); ?>
 		</form>
 	</div>
@@ -69,8 +76,11 @@ function user_column_manager_settings_page() {
 }
 
 if ( isset( $_POST['user_column_manager_save_settings'] ) ) {
-	$registration_date_visible = isset( $_POST['user_column_manager_registration_date_visible'] ) ? true : false;
-	update_option( 'user_column_manager_registration_date_visible', $registration_date_visible );
+    $registration_date_visible = isset( $_POST['user_column_manager_registration_date_visible'] ) ? true : false;
+    update_option( 'user_column_manager_registration_date_visible', $registration_date_visible );
+
+    $last_login_date_visible = isset( $_POST['user_column_manager_last_login_date_visible'] ) ? true : false;
+    update_option( 'user_column_manager_last_login_date_visible', $last_login_date_visible );
 }
 
 /**
@@ -248,3 +258,39 @@ function user_column_manager_show_registration_date_data( $output, $column_name,
 }
 add_filter( 'manage_users_custom_column', 'user_column_manager_show_registration_date_data', 10, 3 );
 
+function user_column_manager_add_last_login_date_column( $columns ) {
+    $last_login_date_visible = get_option( 'user_column_manager_last_login_date_visible', true );
+
+    if ( $last_login_date_visible ) {
+        $columns['last_login_date'] = __( 'Last Login Date', 'user-column-manager' );
+    }
+
+    return $columns;
+}
+add_filter( 'manage_users_columns', 'user_column_manager_add_last_login_date_column' );
+
+function user_column_manager_show_last_login_date_data( $output, $column_name, $user_id ) {
+    if ( 'last_login_date' === $column_name ) {
+        $user = get_userdata( $user_id );
+        if ( $user ) {
+            // Get the last login timestamp from user meta
+            $last_login_timestamp = get_user_meta( $user_id, 'user_column_manager_additional_data_last_login_date', true );
+
+            if ( empty( $last_login_timestamp ) ) {
+                return 'Never logged in';
+            } else {
+                // Convert timestamp to a human-readable format
+                $last_login_date = date_i18n( get_option( 'date_format' ), $last_login_timestamp );
+                return $last_login_date;
+            }
+        }
+    }
+    return $output;
+}
+add_filter( 'manage_users_custom_column', 'user_column_manager_show_last_login_date_data', 10, 3 );
+
+function user_column_manager_update_last_login_date( $user_login, $user ) {
+    // Update the last login timestamp for the user
+    update_user_meta( $user->ID, 'user_column_manager_additional_data_last_login_date', time() );
+}
+add_action( 'wp_login', 'user_column_manager_update_last_login_date', 10, 2 );
