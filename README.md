@@ -47,5 +47,3 @@ This project is licensed under the GPL-3.0 License - see the [LICENSE](https://w
 - [WpNizzle](https://wpnizzle.com/)
 
 ---
-
-<!-- For more information and support, visit the [plugin's GitHub repository](https://github.com/WpNizzle/User-Column-Manager). -->

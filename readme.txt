@@ -3,7 +3,7 @@ Contributors: wpnizzle, Lewis ushindi, frenziecodes
 Tags: user, columns, profile, custom, management
 Requires at least: 6.0
 Tested up to: 6.3
-Stable tag: 0.1.0
+Stable tag: 0.1.5
 Requires PHP: 7.0
 License: GPL-3.0
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
@@ -39,23 +39,3 @@ After activating the plugin, go to "Users" > "User Column Manager" to configure 
 
 = Can I edit and manage additional data from user profiles? =
 Yes, the plugin allows you to input and manage additional data directly from user profiles. When adding or editing a user, the custom columns will appear for input, and the data entered will be displayed in the user list.
-
-
-== Changelog ==
-
-= 0.1.0 =
-* Initial release.
-
-== Upgrade Notice ==
-
-= 0.1.0 =
-Initial release.
-
-== Development ==
-
-This plugin is open source and can be found on [GitHub](https://github.com/WpNizzle/User-Column-Manager).
-
-== License ==
-
-This plugin is licensed under the GPL-3.0 License. For more information, see the [License](https://www.gnu.org/licenses/gpl-3.0.html) file.
-
