@@ -160,16 +160,6 @@ function user_column_manager_add_new_user_fields() {
 			<?php
 		}
 	}
-	?>
-	<table class="form-table">
-		<tr>
-			<th><label for="registration_date">Registration Date:</label></th>
-			<td>
-				<input type="text" name="registration_date" id="registration_date" value="" class="regular-text" disabled />
-			</td>
-		</tr>
-	</table>
-	<?php
 }
 
 add_action( 'user_new_form', 'user_column_manager_add_new_user_fields' );
