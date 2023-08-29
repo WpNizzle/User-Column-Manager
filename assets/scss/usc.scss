@@ -1,5 +1,26 @@
 $red: red;
-    
+$spacing: 5px;
+
+
+.custom-columns-list{
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+.custom-column-item{
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+    border: 1px solid #ddd;
+    background-color: #f9f9f9;
+    margin-bottom: $spacing;
+    cursor: grab;
+}
+.custom-column-item:active {
+    cursor: grabbing;
+}
+
 .delete-column{
     color: $red;
     cursor: pointer;
